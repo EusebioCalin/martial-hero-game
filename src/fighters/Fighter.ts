@@ -27,7 +27,7 @@ export class Fighter extends Phaser.Physics.Arcade.Sprite {
     // Spawn Y positions body bottom at GROUND_Y regardless of scale.
     // Derivation: body_bottom = spriteY + (OFFSET_Y + BODY_H - FRAME/2) * scale
     // → spriteY = GROUND_Y - (BODY_H / 2) * scale
-    super(scene, x, GROUND_Y - (FIGHTER_BODY_HEIGHT / 2) * FIGHTER_SCALE, 'idle');
+    super(scene, x, GROUND_Y - ((FIGHTER_BODY_HEIGHT * 1.75) * FIGHTER_SCALE), 'idle');
     scene.add.existing(this);
     scene.physics.add.existing(this);
 
@@ -38,7 +38,7 @@ export class Fighter extends Phaser.Physics.Arcade.Sprite {
     this.setScale(FIGHTER_SCALE);
 
     const body = this.body as Phaser.Physics.Arcade.Body;
-    body.setSize(FIGHTER_BODY_WIDTH, FIGHTER_BODY_HEIGHT);
+    body.setSize(FIGHTER_BODY_WIDTH, FIGHTER_BODY_HEIGHT, true);
     body.setOffset(FIGHTER_BODY_OFFSET_X, FIGHTER_BODY_OFFSET_Y);
     body.setCollideWorldBounds(true);
 
@@ -143,7 +143,8 @@ export class Fighter extends Phaser.Physics.Arcade.Sprite {
     this.sm['_state'] = FighterState.IDLE;
     this.sm['_locked'] = false;
     const body = this.body as Phaser.Physics.Arcade.Body;
-    body.reset(x, GROUND_Y - (FIGHTER_BODY_HEIGHT / 2) * FIGHTER_SCALE);
+    // body.reset(x, GROUND_Y  - (FIGHTER_BODY_HEIGHT / 2) * FIGHTER_SCALE);
+    body.reset(x, GROUND_Y - ((FIGHTER_BODY_HEIGHT * 1.75) * FIGHTER_SCALE));
     body.setVelocity(0, 0);
     this.facingRight = this.playerIndex === 0;
     this.setFlipX(this.playerIndex === 1);
@@ -164,7 +165,6 @@ export class Fighter extends Phaser.Physics.Arcade.Sprite {
     };
     const animKey = animMap[state];
 
-    // console.log(`Player ${this.playerIndex + 1} state: ${state}, health: ${this.health}`, `this.anims: ${{...this.anims}}`);
     if (this.anims.currentAnim?.key !== animKey || !this.anims.isPlaying) {
       this.play(animKey, true);
     }
@@ -194,10 +194,6 @@ export class Fighter extends Phaser.Physics.Arcade.Sprite {
       const dir = this.facingRight ? 1 : -1;
       const hbX = this.x + dir * hitboxCfg.offsetX * FIGHTER_SCALE;
       const hbY = this.y + hitboxCfg.offsetY * FIGHTER_SCALE;
-
-      console.log(`Activating hitbox for Player 
-        ${this.playerIndex + 1} at frame ${frameIndex} (anim frame ${frame.index})`);
-        console.log('hitbox position', { hbX, hbY });
       this.hitbox.enable(hbX, hbY, hitboxCfg.width * FIGHTER_SCALE, hitboxCfg.height * FIGHTER_SCALE);
     } else {
       this.hitbox.disable();

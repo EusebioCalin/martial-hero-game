@@ -9,6 +9,7 @@ import {
 const P1_START_X = 240;
 const P2_START_X = GAME_WIDTH - 240;
 const ROUND_START_DELAY = 1500; // ms after KO before next round
+const FIRST_ROUND_START_DELAY = 500; // ms after KO before next round
 
 export class GameScene extends Phaser.Scene {
   private fighters!: [Fighter, Fighter];
@@ -32,9 +33,16 @@ export class GameScene extends Phaser.Scene {
     this.roundNum = 1;
     this.wins = [0, 0];
 
-    // Small delay before first round
-    this.time.delayedCall(ROUND_START_DELAY, () => this._startRound());
-    this.events.emit('round-start', this.roundNum);
+    // Emit the "ROUND 1" banner, then activate — fighters are already placed by
+    // _buildFighters() so no position reset needed (that would cause a second fall).
+
+    // this.time.delayedCall(ROUND_START_DELAY, () => { this.roundActive = true; });
+    this.time.delayedCall(100, () => {
+      this.events.emit('round-start', this.roundNum);
+    });
+    this.time.delayedCall(FIRST_ROUND_START_DELAY, () => {
+      this.roundActive = true;
+    });
   }
 
   update(): void {

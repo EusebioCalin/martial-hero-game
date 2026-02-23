@@ -14,7 +14,8 @@ const config: Phaser.Types.Core.GameConfig = {
     default: 'arcade',
     arcade: {
       gravity: { x: 0, y: GRAVITY },
-      debug: false, // set true to visualize hitboxes
+      // debug: true,
+      debugBodyColor: 0x00ff00,
     },
   },
   scene: [BootScene, MenuScene, GameScene, UIScene],

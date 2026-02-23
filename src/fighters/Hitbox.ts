@@ -7,7 +7,7 @@ export class Hitbox extends Phaser.Physics.Arcade.Image {
     scene.physics.add.existing(this);
     const body = this.body as Phaser.Physics.Arcade.Body;
     body.allowGravity = false;
-    // this.setVisible(false);
+    this.setVisible(false);
     this.disable();
   }
 

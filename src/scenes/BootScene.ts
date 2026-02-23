@@ -57,7 +57,6 @@ export class BootScene extends Phaser.Scene {
     });
 
     console.log('[BootScene] All animations created:', SPRITE_CONFIGS.map(c => c.key).join(', '), 'background');
-    // this.scene.start('MenuScene');
-    this.scene.start('GameScene');
+    this.scene.start('MenuScene');
   }
 }
